@@ -1,0 +1,7 @@
+{
+  "name": "polymer-deckgl-taxi",
+  "short_name": "polymer-deckgl-taxi",
+  "description": "visualisation of live available taxi in singapore with polymer deckgl",
+  "start_url": "/",
+  "display": "standalone"
+}

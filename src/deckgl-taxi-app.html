@@ -1,0 +1,127 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/mapbox-gl/mapbox-gl.html">
+<link rel="import" href="../bower_components/deck-gl/deck-gl.html">
+
+<dom-module id="deckgl-taxi-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #map {
+        height: calc(100vh - 16px);
+      }
+    </style>
+
+    <mapbox-gl id="map"
+      interactive
+      map="{{_map}}"
+      access-token="pk.eyJ1Ijoid3lleHRheSIsImEiOiJjaXpoeHhyZjgwMXdxMnhvd2hyNHFsMmhuIn0.TdGIdJF0z_hiQrRQLRgLNw"
+      latitude={{_lat}} longitude={{_lon}}
+      zoom={{_zoom}} pitch={{_pitch}}
+      bearing={{_bearing}}>
+
+      <deck-gl id="deck"
+        latitude=[[_lat]] longitude=[[_lon]]
+        zoom=[[_zoom]] pitch=[[_pitch]]
+        bearing=[[_bearing]]>
+
+        <scatterplot-layer deck-gl-layer
+          layer-id="plot"
+          pickable radius=5
+          accessor-functions=[[_accessorFunctions]]
+          data="[[_points]]">
+        </scatterplot-layer>
+
+        <screen-grid-layer deck-gl-layer
+          layer-id="scatterplot"
+          min-color="[0, 0, 0, 100]"
+          unit-height=50
+          unit-width=50
+          accessor-functions="[[_accessorFunctions]]"
+          data="[[_points]]">
+        </screen-grid-layer>
+
+      </deck-gl>
+
+    </mapbox-gl>
+
+    <mapbox-building-layer layer-id="buildings"
+      map="[[_map]]"
+      fill-extrusion-opacity=0.6
+      fill-extrusion-color="#666">
+    </mapbox-building-layer>
+
+    <iron-ajax
+      id="taxi_ajax"
+      url="https://api.data.gov.sg/v1/transport/taxi-availability"
+      headers='{"api-key": "V7rLnzq3Wlor2G4T2eJZPCgHfSndHnlp"}'
+      handle-as="json"
+      on-response="handleResponse"
+      debounce-duration="300">
+    </iron-ajax>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'deckgl-taxi-app',
+
+      properties: {
+        _map: {
+          type: Object
+        },
+        _lat: {
+          value: 1.3521
+        },
+        _lon: {
+          value: 103.8198
+        },
+        _zoom: {
+          value: 11
+        },
+        _pitch: {
+          value: 0
+        },
+        _bearing: {
+          value: 0
+        },
+        _intervalID : {
+          type: Number
+        },
+        _taxi_api_params: {
+          type: Object
+        },
+        _points: {
+          type: Array
+        },
+        _accessorFunctions: {
+          value: {
+            getPosition: function(d) { return [d[0], d[1], 0]; },
+            getColor: function(d) { return [255, 0, 0, 195]; },
+            getRadius: function(d) { return 10; }
+          }
+        }
+      },
+
+      attached: function() {
+        var self = this;
+        self.$.taxi_ajax.generateRequest();
+        this._intervalID = setInterval(function() {
+          self.$.taxi_ajax.generateRequest();
+        }, 30 * 1000);
+      },
+
+      detached: function() {
+        clearInterval(this._intervalID)
+      },
+
+      handleResponse: function (data) {
+        this._points = data.detail.response.features[0].geometry.coordinates;
+      },
+
+    });
+  </script>
+</dom-module>
