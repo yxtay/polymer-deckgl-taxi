@@ -34,12 +34,12 @@
     "demo"
   ],
   "homepage": "https://github.com/PolymerVis/mapbox-gl",
-  "version": "1.0.1",
-  "_release": "1.0.1",
+  "version": "1.0.3",
+  "_release": "1.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "1.0.1",
-    "commit": "83d2327924f67776c6b2c5169cb6804b70341e50"
+    "tag": "1.0.3",
+    "commit": "7f79e261267a5f2e514547a3217b7122ba47985b"
   },
   "_source": "https://github.com/PolymerVis/mapbox-gl.git",
   "_target": "^1.0.1",
