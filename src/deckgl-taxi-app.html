@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/mapbox-gl/mapbox-gl.html">
 <link rel="import" href="../bower_components/deck-gl/deck-gl.html">
@@ -11,9 +12,16 @@
       }
 
       #map {
-        height: calc(100vh - 16px);
+        height: calc(100vh - 80px);
       }
     </style>
+    
+    <paper-toolbar>
+      <div class="title">Live Available Taxis</div>
+      <div class="title">Time: [[_timestamp]]</div>
+      <div class="title">Count: [[_count]]</div>
+      
+    </paper-toolbar>
 
     <mapbox-gl id="map"
       interactive
@@ -97,6 +105,12 @@
         _points: {
           type: Array
         },
+        _timestamp: {
+          type: String
+        },
+        _count: {
+          type: Number
+        },
         _accessorFunctions: {
           value: {
             getPosition: function(d) { return [d[0], d[1], 0]; },
@@ -119,7 +133,10 @@
       },
 
       handleResponse: function (data) {
-        this._points = data.detail.response.features[0].geometry.coordinates;
+        var response = data.detail.response;
+        this._timestamp = response.features[0].properties.timestamp;
+        this._points = response.features[0].geometry.coordinates;
+        this._count = this._points.length;
       },
 
     });
