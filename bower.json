@@ -4,13 +4,13 @@
   "main": "index.html",
   "dependencies": {
     "polymer": "polymer/polymer#^1.8.1",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
-    "mapbox-gl": "PolymerVis/mapbox-gl#^1.0.1",
-    "deck-gl": "PolymerVis/deck-gl#^1.0.0",
-    "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7"
+    "mapbox-gl": "PolymerVis/mapbox-gl#^1.0.3",
+    "deck-gl": "PolymerVis/deck-gl#^1.0.0"
   },
   "devDependencies": {
-    "web-component-tester": "^4.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^5.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }
